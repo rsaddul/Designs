@@ -1,0 +1,56 @@
+﻿# Check if the Microsoft Teams PowerShell module is installed
+if (-not (Get-Module -Name MicrosoftTeams -ListAvailable)) {
+    # If not installed, install the module
+    Install-Module -Name MicrosoftTeams -Force -AllowClobber -Scope CurrentUser -Repository PSGallery -ErrorAction Continue
+}
+
+# Import the Microsoft Teams PowerShell module
+Import-Module MicrosoftTeams
+
+# Connect to Microsoft Teams
+Connect-MicrosoftTeams
+
+# Define the output file path
+$outputFilePath = "C:\Users\RhysSaddul\OneDrive - eduthing\Documents\KST\Teams.csv"
+
+# Get all Teams
+$teams = Get-Team 
+
+$totalTeams = $teams.Count
+
+# Create an array to store Teams information
+$teamsInfo = @()
+
+foreach ($team in $teams) {
+    $teamPrivacy = $team.Visibility
+    $groupId = $team.GroupId  # Store GroupId for querying team details
+    $teamDetails = Get-Team -GroupId $groupId  # Get additional details of the team
+    $teamName = $teamDetails.DisplayName  # Retrieve team name from team details
+    $teamMembers = Get-TeamUser -GroupId $groupId | Select-Object -ExpandProperty User
+    $channels = Get-TeamChannel -GroupId $groupId
+
+    foreach ($channel in $channels) {
+        $channelName = $channel.DisplayName
+        $channelMembers = Get-TeamChannelUser -GroupId $groupId -DisplayName $channel.DisplayName | Select-Object -ExpandProperty User
+
+        $teamMemberNames = $teamMembers
+        $channelMemberNames = $channelMembers
+
+        $teamsInfo += [PSCustomObject]@{
+            "Privacy" = $teamPrivacy
+            "Team Name" = $teamName
+            "Team Email" = $groupId  # Use GroupId as team email substitute
+            "Member Name" = $teamMemberNames -join ", "
+            "Channel Name" = $channelName
+            "Channel Members" = $channelMemberNames -join ", "
+        }
+    }
+}
+
+# Output information for the first two teams
+$teamsInfo | Format-Table
+
+# Export Teams information to CSV
+$teamsInfo | Export-Csv -Path $outputFilePath -NoTypeInformation
+
+Write-Host "Teams information exported to $outputFilePath" -ForegroundColor Green

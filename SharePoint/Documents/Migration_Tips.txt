@@ -1,0 +1,15 @@
+School SharePoint Site (Pupil & Staff libraries) 
+Staff SharePoint Site (Planning, Year Groups libraries etc)
+Operations SharePoint Site (HR, Admin libraries etc)
+
+50,000 items per library, this includes folders and files
+There is a maximum length for the URL part of the library to be: 62 characters
+
+Apply permissions to site as View
+Apply Library Permissions 
+Can apply folder permissions within Libraries
+Recommended 10 folders per library (will cause performance issues)
+Windows 250 character limit - SharePoint character limit is 400 (can cause issues re-naming or opening) run a script to check
+
+
+

@@ -1,0 +1,15 @@
+# This will export information about only the top-level folders in "\FS1\Staff Redirect," including file and folder count and total size.
+# Adjust the export path as needed. If you have any further requirements or questions, feel free to let me know!
+
+WizTree64.exe "\\SERVERC1\staff$\staff" /export="C:\Staff_Data.csv" /exportmaxdepth=1
+
+
+
+# To find files with path length (includes filename) larger than 250: 
+
+pathlen>250
+
+
+
+Format MB, GB:
+[<1000000]0.00," KB";[<1000000000]0.00,," MB";0.00,,," GB"
